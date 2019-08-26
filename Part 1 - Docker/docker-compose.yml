@@ -3,7 +3,7 @@ services:
   echo-server-one:
     image: landrzejewski/echo-server:v1
     ports:
-      - 8082:8080
+      - 8080:8080
   echo-server-two:
     image: landrzejewski/echo-server:v1
     ports:

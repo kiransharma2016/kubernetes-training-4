@@ -16,3 +16,4 @@ spec:
         name: echo-server
         ports:
         - containerPort: 8080
+          name: http
