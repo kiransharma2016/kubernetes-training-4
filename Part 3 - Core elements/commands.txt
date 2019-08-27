@@ -204,6 +204,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 (Ustawić typ serwisu) kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/service-nodeport.yaml
 kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-nginx --watch
 kubectl get service ingress-nginx --namespace=ingress-nginx
+curl https://192.168.1.241/echo -k
 
 ### Dashboard ###
 

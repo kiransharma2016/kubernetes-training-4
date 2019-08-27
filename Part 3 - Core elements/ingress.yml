@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: web-server-rc
+  name: web-server-rs
 spec:
   replicas: 2
   selector:
