@@ -4,7 +4,7 @@ metadata:
   name: extrenal-api-svc
 subsets:
   - addresses:
-      - ip: 62.129.231.51
+      - ip: 212.77.98.9
     ports:
       - port: 80
 ---
