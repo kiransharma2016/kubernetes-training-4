@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: updater-po
+spec:
+  containers:
+    - name: updater
+      image: landrzejewski/updater:v1
+      volumeMounts:
+        - mountPath: /var/htdocs
+          name: storage
+    - name: web-server
+      image: nginx:1.17.3-alpine
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: storage
+      ports:
+        - containerPort: 80
+  volumes:
+    - name: storage
+      hostPath:
+        path: /tmp/storage
