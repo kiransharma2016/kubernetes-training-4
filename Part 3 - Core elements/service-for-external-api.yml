@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: extrenal-api-svc
+subsets:
+  - addresses:
+      - ip: 62.129.231.51
+    ports:
+      - port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: extrenal-api-svc
+spec:
+  ports:
+    - port: 80
