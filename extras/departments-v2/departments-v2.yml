@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: departments-config
+data:
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: admin
+  POSTGRES_DB: departments
+  PGADMIN_DEFAULT_EMAIL: admin@postgres.pl
+  PGADMIN_DEFAULT_PASSWORD: admin
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: departments-volume
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /tmp/data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: departments-volume
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: postgres
+  template:
+    metadata:
+      name: postgres
+      labels:
+        app-name: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:11.1
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: departments-config
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: storage
+        - name: pgadmin
+          image: dpage/pgadmin4:4
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: departments-config
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: departments-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app-name: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-admin
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30333
+  selector:
+    app-name: postgres
