@@ -3,9 +3,7 @@ kind: Service
 metadata:
   name: echo-service
 spec:
-  type: NodePort
-  #sessionAffinity: ClientIP
-  #externalTrafficPolicy: Local
+  type: LoadBalancer
   selector:
     app-name: echo-server-app
   ports:

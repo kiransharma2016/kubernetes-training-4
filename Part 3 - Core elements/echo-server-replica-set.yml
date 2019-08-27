@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: echo-server-rc
+  name: echo-server-rs
 spec:
   replicas: 3
   selector:
