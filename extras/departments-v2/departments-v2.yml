@@ -90,7 +90,6 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30333
   selector:
     app-name: postgres
 ---
@@ -141,16 +140,16 @@ kind: Ingress
 metadata:
   name: departments-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-    - http:
+     - http:
         paths:
-          - path: /departments/(.*)
+          - path: /departments(/|$)(.*)
             backend:
               serviceName: departments-service
               servicePort: 8000
-          - path: /pgadmin/(.*)
+          - path: /pgadmin(/|$)(.*)
             backend:
               serviceName: postgres-admin
               servicePort: 80
