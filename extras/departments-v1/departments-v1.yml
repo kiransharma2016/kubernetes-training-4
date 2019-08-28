@@ -16,7 +16,7 @@ spec:
         - name: departments
           image: landrzejewski/departments-v1
           ports:
-            - containerPort:
+            - containerPort: 8000
               name: http
 ---
 apiVersion: v1
