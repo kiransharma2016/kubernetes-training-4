@@ -8,6 +8,7 @@ data:
   POSTGRES_DB: departments
   PGADMIN_DEFAULT_EMAIL: admin@postgres.pl
   PGADMIN_DEFAULT_PASSWORD: admin
+  DB_HOST: "postgres-service"
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -93,3 +94,46 @@ spec:
       nodePort: 30333
   selector:
     app-name: postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: departments
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app-name: departments-app
+  template:
+    metadata:
+      labels:
+        app-name: departments-app
+    spec:
+      containers:
+        - name: departments
+          image: landrzejewski/departments-v2
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: departments-config
+                  key: DB_HOST
+          livenessProbe:
+            periodSeconds: 1
+            failureThreshold: 3
+            initialDelaySeconds: 600
+            httpGet:
+              port: 80
+              path: /swagger-ui.html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: departments-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8000
+      targetPort: 8000
+  selector:
+    app-name: departments-app

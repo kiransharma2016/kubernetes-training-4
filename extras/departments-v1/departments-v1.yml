@@ -30,3 +30,20 @@ spec:
       targetPort: http
   selector:
     app-name: departments
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: departments-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: departments-service
+              servicePort: 8000
+          - path: /abc
+            backend:
+              serviceName: departments-service
+              servicePort: 8000
