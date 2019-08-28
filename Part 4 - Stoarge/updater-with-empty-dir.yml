@@ -19,4 +19,4 @@ spec:
   volumes:
     - name: storage
       emptyDir:
-        medium: memory
+        medium: Memory
